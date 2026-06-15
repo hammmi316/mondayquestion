@@ -332,7 +332,7 @@
   // ── World geometry ─────────────────────────────────────────────
   const SPEED = 240;                  // 달리기 속도 px/s
   const FORK_SPACING = 880;           // 갈림길 간격 (한 화면에 하나만 보임)
-  const FIRST_FORK   = 650;
+  const FIRST_FORK   = 1100;
   const BASE_Y    = 360;              // 길 기준 높이 (월드 y)
   const PATH_STEP = 350;              // 길 굴곡 웨이포인트 간격
 
@@ -360,7 +360,7 @@
     };
   }
 
-  let names = [];
+  let names = ['명훈','명근','고승희','현진','미지','민봉','민수','민영','상혁','정연','진주','김철','태윤','하연','지헌','성호','세호','예빈','정후','지우','판수','현수','재민','석린','현철','진현','지현','나래','선미','지희','대훈','상현','연수','재혁','필웅','호재','환희','정빈','태윤','은진','주영','한소루','민서','석현','정애','규완','최승희','혜림','한수','강은','성옥','봉준','Thi Hong Anh Dinh','Bao Le Vy Nguyen','Huynh Ngoc Tram Anh','Thi Thu Ha Nguyen','Hoang Thai Duy Nguyen','Khuong Vu Nguyen'];
 
   function applyBulk() {
     const raw = document.getElementById('bulkNames').value;
