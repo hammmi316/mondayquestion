@@ -230,29 +230,31 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
+      gap: min(1.5vh, 1.5vw);
       background: rgba(13, 22, 17, 0.8);
       text-align: center;
       z-index: 20;
+      /* 배너 안 모든 요소의 베이스: 화면 작은 쪽 기준 스케일 */
+      font-size: min(1.9vh, 1.9vw);
     }
 
     .banner.show { display: flex; }
 
     .banner .big {
-      font-size: 2.6rem;
+      font-size: 3em;
       font-weight: 800;
       color: #7dd49a;
     }
 
-    .banner .sub { color: #ccc; font-size: 1.05rem; }
-    .banner .tomb { font-size: 4.2rem; line-height: 1; }
+    .banner .sub { color: #ccc; font-size: 1.1em; }
+    .banner .tomb { font-size: 4.5em; line-height: 1; }
     .banner .row { gap: 0.7rem; }
-    .banner .will-discover { color: #a8d4bc; font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .banner .will-discover { color: #a8d4bc; font-size: 1em; margin-bottom: 0.2rem; }
 
     .will-area {
       position: relative;
-      width: min(85vw, 300px);
-      height: min(85vw, 300px);
+      width: min(48vh, 48vw);
+      height: min(48vh, 48vw);
       flex-shrink: 0;
     }
     #willEnvelope {
@@ -261,34 +263,34 @@
       align-items: center; justify-content: center;
       gap: 0.6rem;
     }
-    .envelope-icon { font-size: 7rem; line-height: 1; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
+    .envelope-icon { font-size: 7em; line-height: 1; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
     #willPaper {
       position: absolute; inset: 0;
       background: #fdf6e3;
-      background-image: repeating-linear-gradient(transparent, transparent 37px, #c8a97a44 37px, #c8a97a44 38px);
-      background-size: 100% 38px;
+      background-image: repeating-linear-gradient(transparent, transparent calc(3.5em - 1px), #c8a97a44 calc(3.5em - 1px), #c8a97a44 calc(3.5em));
+      background-size: 100% 3.5em;
       border: 1px solid #c8a97a;
-      border-radius: 3px;
-      padding: 1.4rem 1.8rem 1.2rem;
+      border-radius: 4px;
+      padding: 0.6em 1.8em 1em;
       box-shadow: 0 8px 32px rgba(0,0,0,0.5), 3px 3px 0 #e0d0b0, -1px -1px 0 #e0d0b0;
       font-family: 'Nanum Pen Script', cursive;
-      font-size: 1.6rem;
+      font-size: 2.2em;
       color: #2c1a0e;
-      line-height: 1.9;
+      line-height: 1.6;
       text-align: center;
       transform: rotate(-1.2deg);
       display: none;
       overflow: hidden;
     }
     #willPaper .will-head {
-      font-size: 1.9rem; font-weight: bold;
+      font-size: 1.3em; font-weight: bold;
       border-bottom: 2px solid #c8a97a;
-      padding-bottom: 0.3rem; margin-bottom: 0.5rem;
+      padding-bottom: 0.2em; margin-bottom: 0.4em;
       letter-spacing: 0.4em;
     }
     #willPaper .paw-stamp {
-      position: absolute; bottom: 0.7rem; right: 0.8rem;
-      font-size: 2rem;
+      position: absolute; bottom: 0.5em; right: 0.6em;
+      font-size: 1.4em;
       transform: rotate(20deg);
       filter: sepia(1) saturate(8) hue-rotate(-40deg) brightness(0.65);
       opacity: 0.75;
@@ -634,17 +636,33 @@
     dir => `제가 죽는다면,\n제 ${dir}쪽 사람이\n발표해줬으면 합니다.\n부디 잘 부탁드립니다.`,
     dir => `제 ${dir}쪽 사람에게 부탁드립니다.\n부디 발표 잘 해주길..`,
     dir => `제 마지막 소원은 단 하나입니다.\n제 ${dir}쪽 사람이\n발표하는 것입니다.`,
-    () => `저는 비록 죽었지만,\n저승에서도 반드시\n발표하겠습니다.\n걱정 마세요.`,
+    () => `귀신이 되어서라도\n발표하러 오겠습니다.\n걱정하지 마세요.`,
   ];
 
   function showWill() {
     const idx = Math.floor(Math.random() * WILLS.length);
     const dir = Math.random() < 0.5 ? '오른' : '왼';
     const lines = WILLS[idx](dir).split('\n');
-    document.getElementById('willContent').innerHTML =
-      lines.map(l => `<div>${l}</div>`).join('');
+
+    const container = document.getElementById('willContent');
+    container.innerHTML = lines.map(() => `<div></div>`).join('');
+    const divs = container.querySelectorAll('div');
+
     document.getElementById('willEnvelope').style.display = 'none';
     document.getElementById('willPaper').style.display = 'block';
+
+    let li = 0, ci = 0;
+    function tick() {
+      if (li >= lines.length) return;
+      if (ci < lines[li].length) {
+        divs[li].textContent += lines[li][ci++];
+        setTimeout(tick, 55);
+      } else {
+        li++; ci = 0;
+        setTimeout(tick, li < lines.length ? 180 : 0);
+      }
+    }
+    setTimeout(tick, 150);
   }
 
   function updateMuteIcon(muted) {
